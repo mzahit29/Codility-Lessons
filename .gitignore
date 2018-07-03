@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Codility Lessons/Debug
+/Codility Lessons/Codility Lessons/Debug
+/Codility Lessons/.vs/Codility Lessons/v15/Browse.VC.opendb
