@@ -2,6 +2,7 @@
 #include "Lessons.h"
 #include <iostream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -59,6 +60,40 @@ namespace Lesson_2
 
 		return result;
 	}
+
+	// Finding the odd occurrences in a vector
+	// Fails on one test case with million elements [Correctness: %100, Performance: %75]
+	// Also fails on O(1) space complexity, since I am using a map and space complexity becomes O(N)
+	//int solution(vector<int> &A) {
+	//	// write your code in C++14 (g++ 6.2.0)
+
+	//	map<int, int> count_map;
+
+
+	//	for(auto x : A)
+	//	{
+	//		++count_map[x];
+	//	}
+
+	//	for (auto x : count_map)
+	//	{
+	//		if (x.second % 2 == 1) return x.first;
+	//	}
+
+	//	return 0;
+	//}
+
+	// Finding the odd occurrences in a vector %100 success
+	int solution(vector<int> &A)
+	{
+		int result = 0;
+		for (auto x : A)
+		{
+			result ^= x;
+		}
+
+		return result;
+	}
 }
 
 void Lessons::_1()
@@ -83,5 +118,8 @@ void Lessons::_2()
 	{
 		cout << x << " ";
 	}
+	cout << endl;
 
+	vector<int> v2{ 4, 3, 1, 4, 3, 1, 9, 3, 3, 4, 5, 5, 4, 8, 8, 9, 21 };
+	cout << "Unpaired element: " << Lesson_2::solution(v2) << endl;
 }
