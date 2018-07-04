@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// Iterations
 namespace Lesson_1
 {
 	int solution(int N) {
@@ -34,6 +35,7 @@ namespace Lesson_1
 
 }
 
+// Arrays
 namespace Lesson_2
 {
 	vector<int> solution(vector<int> &A, int K) {
@@ -96,6 +98,29 @@ namespace Lesson_2
 	}
 }
 
+// Time complexity
+namespace Lesson_3
+{
+	// Frog Jump O(1) time complexity, O(1) space complexity
+	int solution(int X, int Y, int D) {
+
+		int jumps{};
+
+		// Readable form
+		/*int distance = Y - X;
+		int divisor = distance / D;
+		int remainder = distance % D;
+		if (remainder) jumps = divisor + 1;
+		else jumps = divisor;*/
+
+		// OR more compact form
+		jumps = (Y - X) / D + (((Y - X) % D) ? 1 : 0);
+
+		return jumps;
+
+	}
+}
+
 void Lessons::_1()
 {
 	cout << "Max gap: " << Lesson_1::solution(17) << endl;
@@ -122,4 +147,9 @@ void Lessons::_2()
 
 	vector<int> v2{ 4, 3, 1, 4, 3, 1, 9, 3, 3, 4, 5, 5, 4, 8, 8, 9, 21 };
 	cout << "Unpaired element: " << Lesson_2::solution(v2) << endl;
+}
+
+void Lessons::_3()
+{
+	cout << "Jumps: " << Lesson_3::solution(10, 85, 30) << endl;
 }
