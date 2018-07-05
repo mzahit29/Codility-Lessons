@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,22 +13,25 @@ namespace Lesson_1
 	int solution(int N) {
 		// write your code in C++14 (g++ 6.2.0)
 
-		int remainder{}, divisor{};
-		bool gap_start{};
 		int count{};
 		int max_gap{};
+		bool peak_has_begun{};
 
 		while (N >= 1) {
-			remainder = N - (N / 2) * 2;
-			divisor = N / 2;
+			const int remainder = N % 2;
 
-			if (!gap_start && remainder) gap_start = true;
-			else if (gap_start && !remainder) ++count;
-			else if (gap_start && count && remainder) { if (count > max_gap) max_gap = count; count = 0; }
-			else if (gap_start && !count && remainder) { count = 0; }
+			if (remainder)
+			{
+				peak_has_begun = true;
+				max_gap = std::max(max_gap, count);
+				count = 0;
+			}
+			else
+			{
+				if (peak_has_begun) ++count;
+			}
 
-
-			N = divisor;
+			N /= 2;
 		}
 
 		return max_gap;
@@ -74,7 +78,7 @@ namespace Lesson_2
 
 	//	for(auto x : A)
 	//	{
-	//		++count_map[x];
+	//		++count_map[x];  // Default constructs the object if the key is not present
 	//	}
 
 	//	for (auto x : count_map)
