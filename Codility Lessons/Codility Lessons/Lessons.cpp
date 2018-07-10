@@ -176,6 +176,34 @@ namespace Lesson_4
 
 		return (result != 0) ? 0 : 1;
 	}
+
+	int solution(int X, vector<int> &A)
+	{
+		// Find the permutation XOR of [1, X]
+		int perm_sum{};
+		for (int i = 1; i < X + 1; ++i) {
+			perm_sum += i;
+		}
+
+		// Create a map of to hold already encountered positions
+		map<int, bool> encounter_map;
+
+		for (size_t i = 0; i < A.size(); ++i)
+		{
+			int val = A[i];
+			if (val < X + 1) // We only care about positions [1, X]
+			{
+				if (!encounter_map[val])  // If not encountered that position before
+				{
+					encounter_map[val] = true;  // Save it to encountered map
+					perm_sum -= val;
+					if (perm_sum == 0) return i;
+				}
+			}
+		}
+
+		return -1;
+	}
 }
 
 
@@ -222,4 +250,8 @@ void Lessons::_4()
 {
 	vector<int> v{ 1, 5, 2, 4 };
 	cout << "Is permutation returned: " << Lesson_4::solution(v) << endl;
+
+	vector<int> v2{ 1,3,1,4,2,3,5,4 };
+	int dest{5};
+	cout << "Positions 1 to " << dest << " are filled in " << Lesson_4::solution(dest, v2) << " seconds" << endl;
 }
