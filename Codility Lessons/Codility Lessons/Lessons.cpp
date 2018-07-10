@@ -161,6 +161,24 @@ namespace Lesson_3
 	}
 }
 
+namespace Lesson_4
+{
+	int solution(vector<int> & A)
+	{
+		// Assume A is a permutation from 1 to N in random order. If you XOR it with list [1, ..., N] then you should
+		// get 0 as a result otherwise non zero.
+		int result = 0;
+		for (size_t i = 1; i < A.size() + 1; ++i)
+		{
+			result ^= A[i - 1];
+			result ^= i;
+		}
+
+		return (result != 0) ? 0 : 1;
+	}
+}
+
+
 void Lessons::_1()
 {
 	cout << "Max gap: " << Lesson_1::solution(17) << endl;
@@ -198,4 +216,10 @@ void Lessons::_3()
 
 	vector<int> v2{ 3, 1, 2, 4, 3 };
 	cout << "Min difference of parts: " << Lesson_3::solution2(v2) << endl;
+}
+
+void Lessons::_4()
+{
+	vector<int> v{ 1, 5, 2, 4 };
+	cout << "Is permutation returned: " << Lesson_4::solution(v) << endl;
 }
