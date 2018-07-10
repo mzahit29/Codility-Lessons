@@ -123,6 +123,42 @@ namespace Lesson_3
 		return jumps;
 
 	}
+
+	int solution(vector<int> & A)
+	{
+		int result = 0;
+		for (size_t i = 1; i < A.size() + 1; ++i)
+		{
+			result ^= A[i - 1];
+			result ^= i;
+		}
+		result ^= A.size() + 1;
+
+		return result;
+	}
+
+	int solution2(vector<int> & A)
+	{
+		int sum{};
+		for (auto i : A)
+		{
+			sum += i;
+		}
+
+		int min_difference{std::numeric_limits<int>::max()};
+		int sum_part_a{};
+		for(int i = 1; i < A.size(); ++i) // P = [1, N-1]
+		{
+			sum_part_a += A[i - 1];
+			int cur_diff = abs((2 * sum_part_a) - sum);
+			if (cur_diff < min_difference)
+			{
+				min_difference = cur_diff;
+			}
+		}
+
+		return min_difference;
+	}
 }
 
 void Lessons::_1()
@@ -156,4 +192,10 @@ void Lessons::_2()
 void Lessons::_3()
 {
 	cout << "Jumps: " << Lesson_3::solution(10, 85, 30) << endl;
+
+	vector<int> v{ 1, 3, 2, 5 };
+	cout << "Missing element: " << Lesson_3::solution(v) << endl;
+
+	vector<int> v2{ 3, 1, 2, 4, 3 };
+	cout << "Min difference of parts: " << Lesson_3::solution2(v2) << endl;
 }
