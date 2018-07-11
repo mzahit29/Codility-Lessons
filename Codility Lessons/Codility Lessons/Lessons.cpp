@@ -147,7 +147,7 @@ namespace Lesson_3
 
 		int min_difference{std::numeric_limits<int>::max()};
 		int sum_part_a{};
-		for(int i = 1; i < A.size(); ++i) // P = [1, N-1]
+		for(size_t i = 1; i < A.size(); ++i) // P = [1, N-1]
 		{
 			sum_part_a += A[i - 1];
 			int cur_diff = abs((2 * sum_part_a) - sum);
@@ -228,6 +228,31 @@ namespace Lesson_4
 		return 1;
 	}
 
+	// MaxCounters
+	vector<int> solution3(int N, vector<int> &A)
+	{
+		vector<int> result(N, 0); // Vector of N counters all initialized to 0
+
+		int max_counter{};
+
+		for (auto i : A)
+		{
+			if (i == N + 1)
+			{
+				for (auto &elem : result)
+				{
+					elem = max_counter;
+				}
+			} else
+			{
+				++result[i - 1];
+				if (result[i - 1] > max_counter) max_counter = result[i - 1];
+
+			}
+		}
+
+		return result;
+	}
 }
 
 
@@ -281,4 +306,11 @@ void Lessons::_4()
 
 	vector<int> v3{ 1, 3, 6, 4, 1, 2 };
 	cout << "Smallest not occuring integer is " << Lesson_4::solution2(v3) << endl;
+
+	// max counter
+	vector<int> v4{ 3, 4, 4, 6, 1, 4, 4 };
+	for (auto x : Lesson_4::solution3(5, v4))
+	{
+		cout << x << " ";
+	} cout << endl;
 }
