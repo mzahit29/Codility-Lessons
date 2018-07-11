@@ -204,6 +204,24 @@ namespace Lesson_4
 
 		return -1;
 	}
+
+	int solution2(vector<int> & A)
+	{
+		map<int, bool> encounter_map;  // holds the already encountered integers
+
+		unsigned int smallest{ 1 };  // smallest positive integer not encountered yet
+
+		for(auto i : A)
+		{
+			encounter_map[i] = true;
+			if (i == smallest)
+			{
+				while (encounter_map[++smallest]);  // Find the next smallest not encountered.
+			}
+		}
+
+		return smallest;
+	}
 }
 
 
@@ -254,4 +272,7 @@ void Lessons::_4()
 	vector<int> v2{ 1,3,1,4,2,3,5,4 };
 	int dest{5};
 	cout << "Positions 1 to " << dest << " are filled in " << Lesson_4::solution(dest, v2) << " seconds" << endl;
+
+	vector<int> v3{ 1, 3, 6, 4, 1, 2 };
+	cout << "Smallest not occuring integer is " << Lesson_4::solution2(v3) << endl;
 }
