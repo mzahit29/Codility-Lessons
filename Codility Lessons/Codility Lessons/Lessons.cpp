@@ -207,21 +207,27 @@ namespace Lesson_4
 
 	int solution2(vector<int> & A)
 	{
-		map<int, bool> encounter_map;  // holds the already encountered integers
+		// array A of N integers where N [1, 100000], each integer [-1,000,000 , +-1,000,000]
+		// by pigeonhole principle we know that at least one of the integers between [1, 100001] will not be in the list
+		const int N = 100000;
+		int exists[N + 2]{};
 
-		unsigned int smallest{ 1 };  // smallest positive integer not encountered yet
-
-		for(auto i : A)
+		for (auto i : A)
 		{
-			encounter_map[i] = true;
-			if (i == smallest)
+			if (0 < i && i < N + 2)
 			{
-				while (encounter_map[++smallest]);  // Find the next smallest not encountered.
+				exists[i] = 1;
 			}
 		}
 
-		return smallest;
+		for (int i = 1; i < N + 2; ++i)
+		{
+			if (!exists[i]) return i;
+		}
+
+		return 1;
 	}
+
 }
 
 
