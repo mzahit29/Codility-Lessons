@@ -234,21 +234,31 @@ namespace Lesson_4
 		vector<int> result(N, 0); // Vector of N counters all initialized to 0
 
 		int max_counter{};
+		int saved_upper_bound{};
 
+		// O(M)
 		for (auto i : A)
 		{
 			if (i == N + 1)
 			{
-				for (auto &elem : result)
-				{
-					elem = max_counter;
-				}
+				saved_upper_bound += max_counter;
+				max_counter = 0; // Reset
 			} else
 			{
-				++result[i - 1];
-				if (result[i - 1] > max_counter) max_counter = result[i - 1];
+				// Set stale data to saved_upper_bound + 1, if not stale increment
+				if (result[i - 1] <= saved_upper_bound) result[i - 1] = saved_upper_bound + 1;
+				else ++result[i - 1];
 
+				int diff = result[i - 1] - saved_upper_bound;
+				if (diff > max_counter) max_counter = diff;
 			}
+		}
+
+		// O(N)
+		// Final step: Go over the list and set the values which are less than saved_upper_bound to saved_upper_bound
+		for (auto &i : result)
+		{
+			if (i < saved_upper_bound) i = saved_upper_bound;
 		}
 
 		return result;
