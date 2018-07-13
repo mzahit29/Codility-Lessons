@@ -4,6 +4,9 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <list>
+#include <queue>
+#include <stack>
 
 using namespace std;
 
