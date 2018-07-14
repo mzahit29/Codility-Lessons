@@ -16,5 +16,6 @@ public:
 class STL_Study
 {
 public:
-	static void _1();
+	static void containers_run();
+	static void algorithms_sequence_operations_run();
 };

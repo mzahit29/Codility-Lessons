@@ -10,6 +10,7 @@
 #include <queue>
 #include <deque>
 #include <stack>
+#include <set>
 
 
 using namespace std;
@@ -18,8 +19,10 @@ using namespace std;
 bool greater_than_zero(int i) { return i > 0; }
 
 
-void STL_Study::_1()
+void STL_Study::containers_run()
 {
+	cout << "\n\n" << "STL CONTAINER OPERATIONS" << "__________________________\n" << endl;
+
 	vector<double> v;
 	pair<int, int> p{ 4, 4 };
 	cout << p.first << " - " << p.second << endl;
@@ -126,14 +129,116 @@ void STL_Study::_1()
 
 
 
+
+	// std::priority_queue: keeps the underlying data in order (with default greater compare, or the comparer you provide)
+	auto print_pqueue = [](priority_queue<int> &pq)
+	{
+		while (!pq.empty())
+		{
+			cout << pq.top() << " ";
+			pq.pop();
+		}
+		cout << endl;
+	};
+
+	priority_queue<int> pq;
+	for(int x : { 1, 8, 5, 6, 3, 4, 0, 9, 7, 2 })
+	{
+		pq.push(x);
+	}
+
+
+	print_pqueue(pq);
+
+	// Specifying the underlying container and comparer
+	auto cmp = [](int lhs, int rhs) { return rhs < lhs; };
+	priority_queue<int, vector<int>,  decltype(cmp)> pq2(cmp);
+	for (int y : {1, 8, 5, 6, 3, 4, 0, 9, 7, 2})
+	{
+		pq2.push(y);
+	}
+	priority_queue<int, vector<int>, decltype(cmp)> temp = pq2;
+	while(!temp.empty())
+	{
+		cout << temp.top() << " ";
+		temp.pop();
+	} cout << endl;
+
+
+
+
+
+	// std::set : stores unique elements following a specific order
+	int myints[] = { 1,4,2,8,20,3,45,1 };
+	set<int> myset(myints, myints+4);
+	auto print_set = [](set<int> &myset)
+	{
+		for (auto i : myset)
+		{
+			cout << i << " ";
+		}cout << endl;
+	};
+	print_set(myset);
+
+	myset.insert(6);
+	print_set(myset);
+	//auto it_set = myset.find(4);		// This works
+	//auto it_set = find(myset.begin(), myset.end(), 4);   // This works
+	auto it_set = find(begin(myset), end(myset), 4);    // This works
+	if (it_set != myset.end())
+	{
+		myset.erase(it_set);
+	}
+	print_set(myset);
+
+	set<int> myset2(myints + 4, myints + 8);
+	myset.swap(myset2);
+	print_set(myset);
+	myset.insert(1);  // 1 is already in set, so it is not added (elements are unique in set)
+	print_set(myset);
+	cout << "Size of myset is : " << myset.size() << endl;
+	for (auto & x : myset) cout << x << " ";
+	cout << endl;
+	for (auto & x : myset) cout << x << " ";
+	cout << endl;
+
+
+}
+
+void STL_Study::algorithms_sequence_operations_run()
+{
+	cout << "\n\n\n" << "ALGORITHMS SEQUENCE OPERATIONS" << "__________________________\n" << endl;
+	deque<int> deq;
+	deq.push_back(5);
+	deq.push_back(1);
+	deq.push_back(8);
+	deq.push_back(4);
+	deq.push_back(3);
+	deq.push_back(888);
+	auto print_deque = [](const deque<int> & deq)
+	{
+		for (auto i : deq)
+		{
+			cout << i << " ";
+		}
+		cout << endl;
+	};
 	cout << "All values in the deque is bigger than zero : " << all_of(deq.begin(), deq.end(), [](int i) {return i > 0; }) << endl;
 	deq.push_back(-2);
 	print_deque(deq);
 	cout << "All values in the deque is bigger than zero : " << boolalpha << all_of(deq.begin(), deq.end(), greater_than_zero) << endl;
-
+	list<int> A{ 6,3,4, 55, 4, 3 ,-1 };
 	cout << "There is an element with value 4 in list : " << any_of(A.begin(), A.end(), [](int i) { return i == 4; }) << endl;
 	cout << "There is an element with value 74 in list : " << any_of(A.begin(), A.end(), [](int i) { return i == 74; }) << endl;
 	cout << "There is no element with value 74 in list : " << none_of(A.begin(), A.end(), [](int i) { return i == 74; }) << endl;
+
+
+	auto print_list = [](list<int> & A) {
+		for (list<int>::iterator it = A.begin(); it != A.end(); ++it) {
+			cout << *it << " ";
+		}
+		cout << endl;
+	};
 
 	cout << "Before incrementing list elements by 1: " << endl;
 	print_list(A);
@@ -185,9 +290,23 @@ void STL_Study::_1()
 		cout << "First value divisible by 3 is : " << *it_divisible_by_3 << endl;
 	}
 
+	// std::find_end(..): Find the last sequence that matches the given vector
+	vector<int> v_{ 0,0,0,0,1,1,0,0,1,1,0,1 };
+	vector<int> t_{ 1,1,0 };
+	cout << "Searching for the last occurence of pattern: ";
+	for (auto &x : t_) { cout << x; } cout << endl;
+	auto it_end = find_end(v_.begin(), v_.end(), t_.begin(), t_.end());
+	if (it_end != v_.end())
+	{
+		for (auto &x : v_) { cout << x; } cout << endl;
+		int dist = distance(v_.begin(), it_end);
+		while (dist) { cout << " "; --dist; }
+		cout << "^" << endl;
+	}
+
 	// std::find_first_of(): Search elements of v1_source in v1_dest
-	vector<int> v1_source{9 ,7, 10, 1, 857};
-	vector<int> v1_dest{0, 2, 1, 4};
+	vector<int> v1_source{ 9 ,7, 10, 1, 857 };
+	vector<int> v1_dest{ 0, 2, 1, 4 };
 
 	vector<int>::iterator match_it = find_first_of(v1_source.begin(), v1_source.end(), v1_dest.begin(), v1_dest.end());
 	if (match_it != v1_source.end()) {
@@ -214,4 +333,16 @@ void STL_Study::_1()
 		cout << "^" << endl;
 	}
 
+	// std::search_n(..) : find count of consecutive values
+	vector<int> v3{ 0,0,0,1,0,1,1,0,1,1,1,0,1 };
+	auto it_con = search_n(v3.begin(), v3.end(), 3, 1);
+	if (it_con != v3.end())
+	{
+		cout << "Found 3 consecutive 1's in v3 vector" << endl;
+		for (auto x : v3) cout << x;
+		cout << endl;
+		int dist = distance(v3.begin(), it_con);
+		while (dist) { cout << " "; --dist; }
+		cout << "^" << endl;
+	}
 }
