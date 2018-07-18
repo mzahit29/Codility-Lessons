@@ -346,3 +346,91 @@ void STL_Study::algorithms_sequence_operations_run()
 		cout << "^" << endl;
 	}
 }
+
+
+template <typename T, int size>
+int arr_size(T(&arr)[size])
+{
+	return size;
+}
+
+class Empty {};
+void STL_Study::algoirthms_sorting_operations_run()
+{
+	cout << "\n\n\n" << "ALGORITHMS SORTING OPERATIONS" << "__________________________\n" << endl;
+
+	auto print_vector = [](vector<int> &v)
+	{
+		for (auto & x : v) { cout << x << " "; }
+		cout << endl;
+	};
+
+
+	int a[] = { 4,1,2,6,22,10 };
+	cout << "Array size: " << arr_size(a);
+	cout << "\n" << "Array before sort: \n\t";
+	for (auto i : a) { cout << i << " "; }
+
+	sort(a, a + (sizeof(a)/sizeof(int)));
+	cout << "\n" << "Array after sort: \n\t";
+	for (auto i : a) { cout << i << " "; } cout << endl;
+	for (int * it = a; it != a + (sizeof(a) / sizeof(int)); ++it)
+	{
+		cout << *it << " ";
+	}
+
+	int b[] = { 1,5,2 };
+	// sizes are different therefore different types
+	cout << "Types of a and b arrays are equal : " << boolalpha << (typeid(a) == typeid(b)) << endl;
+	cout << "a[int] type is : " << typeid(a).name() << endl;  // int [6]
+	cout << "b[int] type is : " << typeid(b).name() << endl;  // int [3]
+
+
+	int c[] = {0,0,1};
+	// sizes are the same therefore same types
+	cout << "Types of b and c arrays are equal : " << boolalpha << (typeid(b) == typeid(c)) << endl;
+	cout << "b[int] type is : " << typeid(b).name() << endl;  // int [6]
+	cout << "c[int] type is : " << typeid(c).name() << endl;  // int [3]
+
+
+	// check if range is sorted in ascending order
+	vector<int> v{8,4,17,0,1,5};
+	cout << "Before sort___________:" << endl;
+	print_vector(v);
+	sort(v.begin(), v.end() - 2);
+	cout << "After sort___________:" << endl; 
+	print_vector(v);
+
+	cout << "Vector is sorted in range v.begin() - (v.end() - 2) : " << boolalpha << is_sorted(v.begin(), v.end() - 2) << endl;
+	cout << "Vector is sorted in range v.begin() - v.end() : " << boolalpha << is_sorted(v.begin(), v.end()) << endl;
+
+	// find the iterator where the vector is sorted until
+	vector<int>::iterator it = is_sorted_until(v.begin(), v.end());
+	int dist = distance(v.begin(), it);
+	print_vector(v);
+	while (dist--) cout << "  "; cout << "^" << endl;
+	cout << "Vector is sorted until: " << *it << endl;
+
+
+
+
+	// nth element: it finds the nth element that would be at position n if the list was sorted.
+	// note that the implementation doesn't have to sort the list fully, it can bail out whenever it is sure what the 
+	// nth element will be.
+	// "std::sort sorts all the elements. std::nth_elenemt doesn't. It just puts the nth element in the nth positions, 
+	// with smaller or equal elements on one side and larger or equal elements on the other. It is used if you want to 
+	// find the nth element (obviously) or if you want the n smallest or largest elements. A full sort satisfies these 
+	// requirements."
+	std::vector<int> v3{ 9,3,6,2,1,7,8,5,4,0 };
+
+	std::nth_element(v3.begin(), v3.begin() + v3.size() / 2, v3.end());
+	std::cout << "The median is " << v3[v3.size() / 2] << '\n';
+
+	std::nth_element(v3.begin(), v3.begin() + 1, v3.end(), std::greater<int>());
+	std::cout << "The second largest element is " << v3[1] << '\n';
+	print_vector(v3);
+	cout << "Note that the vector is sorted for this example BUT IT DIDN'T HAVE TO BE!" << endl;
+
+	// Compiler dependent but usually 1 byte. This is required to be able to differentiate two different "Empty" objects.
+	cout << "Size of an empty class: " << sizeof(Empty) << endl;
+}
