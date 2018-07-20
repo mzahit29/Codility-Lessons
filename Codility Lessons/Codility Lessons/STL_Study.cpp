@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "STL_Study.h"
+#include "Utility.h"
 
 #include <iostream>
 #include <string>
@@ -11,6 +12,7 @@
 #include <deque>
 #include <stack>
 #include <set>
+#include <iterator>
 
 
 using namespace std;
@@ -33,30 +35,25 @@ void STL_Study::containers_run()
 
 
 
-	list<int> A{ 6,3,4, 55, 4, 3 ,-1 };
-	auto print_list = [](list<int> & A) {
-		for (list<int>::iterator it = A.begin(); it != A.end(); ++it) {
-			cout << *it << " ";
-		}
-		cout << endl;
-	};
-	print_list(A);
+	list<int> A{ 6, 3, 4, 55, 4, 3 ,-1 };
+	
+	Utility::print_list(A);
 	A.pop_back();
-	print_list(A);
+	Utility::print_list(A);
 	A.pop_front();
-	print_list(A);
+	Utility::print_list(A);
 	A.push_back(2);
-	print_list(A);
+	Utility::print_list(A);
 	A.push_front(555);
-	print_list(A);
+	Utility::print_list(A);
 	A.sort();
-	print_list(A);
+	Utility::print_list(A);
 	A.reverse();
-	print_list(A);
+	Utility::print_list(A);
 	A.sort();
-	print_list(A);
+	Utility::print_list(A);
 	A.erase(unique(A.begin(), A.end()), A.end());
-	print_list(A);
+	Utility::print_list(A);
 
 
 
@@ -69,36 +66,14 @@ void STL_Study::containers_run()
 	q.push(77);
 	q.push(13);
 	q.pop();
-	auto print_queue = [](queue<int> q)
-	{
-		while (!q.empty())
-		{
-			cout << q.front() << " ";
-			q.pop();
-		}
-		cout << endl;
-	};
-	print_queue(q);
-	print_queue(q);
 
-	auto reverse_queue = [](queue<int> &q)
-	{
-		stack<int> st;
-		while (!q.empty())
-		{
-			st.push(q.front());
-			q.pop();
-		}
+	Utility::print_queue(q);
+	Utility::print_queue(q);
 
-		while (!st.empty())
-		{
-			q.push(st.top());
-			st.pop();
-		}
-	};
 
-	reverse_queue(q);
-	print_queue(q);
+	cout << "Reversing queue: " << endl;
+	Utility::reverse_queue(q);
+	Utility::print_queue(q);
 
 
 
@@ -110,20 +85,11 @@ void STL_Study::containers_run()
 	deq.push_back(3);
 	deq.push_back(888);
 
-	auto print_deque = [](const deque<int> & deq)
-	{
-		for (auto i : deq)
-		{
-			cout << i << " ";
-		}
-		cout << endl;
-	};
-
-	print_deque(deq);
+	Utility::print_deque(deq);
 	deq.pop_back();
-	print_deque(deq);
+	Utility::print_deque(deq);
 	deq.pop_front();
-	print_deque(deq);
+	Utility::print_deque(deq);
 
 	cout << deq.front() << " is at the front of the queue" << endl;
 
@@ -131,16 +97,6 @@ void STL_Study::containers_run()
 
 
 	// std::priority_queue: keeps the underlying data in order (with default greater compare, or the comparer you provide)
-	auto print_pqueue = [](priority_queue<int> &pq)
-	{
-		while (!pq.empty())
-		{
-			cout << pq.top() << " ";
-			pq.pop();
-		}
-		cout << endl;
-	};
-
 	priority_queue<int> pq;
 	for(int x : { 1, 8, 5, 6, 3, 4, 0, 9, 7, 2 })
 	{
@@ -148,7 +104,7 @@ void STL_Study::containers_run()
 	}
 
 
-	print_pqueue(pq);
+	Utility::print_pqueue(pq);
 
 	// Specifying the underlying container and comparer
 	auto cmp = [](int lhs, int rhs) { return rhs < lhs; };
@@ -160,7 +116,7 @@ void STL_Study::containers_run()
 	priority_queue<int, vector<int>, decltype(cmp)> temp = pq2;
 	while(!temp.empty())
 	{
-		cout << temp.top() << " ";
+		cout << " " << temp.top();
 		temp.pop();
 	} cout << endl;
 
@@ -171,17 +127,11 @@ void STL_Study::containers_run()
 	// std::set : stores unique elements following a specific order
 	int myints[] = { 1,4,2,8,20,3,45,1 };
 	set<int> myset(myints, myints+4);
-	auto print_set = [](set<int> &myset)
-	{
-		for (auto i : myset)
-		{
-			cout << i << " ";
-		}cout << endl;
-	};
-	print_set(myset);
+
+	Utility::print_set(myset);
 
 	myset.insert(6);
-	print_set(myset);
+	Utility::print_set(myset);
 	//auto it_set = myset.find(4);		// This works
 	//auto it_set = find(myset.begin(), myset.end(), 4);   // This works
 	auto it_set = find(begin(myset), end(myset), 4);    // This works
@@ -189,20 +139,14 @@ void STL_Study::containers_run()
 	{
 		myset.erase(it_set);
 	}
-	print_set(myset);
+	Utility::print_set(myset);
 
 	set<int> myset2(myints + 4, myints + 8);
 	myset.swap(myset2);
-	print_set(myset);
+	Utility::print_set(myset);
 	myset.insert(1);  // 1 is already in set, so it is not added (elements are unique in set)
-	print_set(myset);
+	Utility::print_set(myset);
 	cout << "Size of myset is : " << myset.size() << endl;
-	for (auto & x : myset) cout << x << " ";
-	cout << endl;
-	for (auto & x : myset) cout << x << " ";
-	cout << endl;
-
-
 }
 
 void STL_Study::algorithms_sequence_operations_run()
@@ -215,45 +159,30 @@ void STL_Study::algorithms_sequence_operations_run()
 	deq.push_back(4);
 	deq.push_back(3);
 	deq.push_back(888);
-	auto print_deque = [](const deque<int> & deq)
-	{
-		for (auto i : deq)
-		{
-			cout << i << " ";
-		}
-		cout << endl;
-	};
+
 	cout << "All values in the deque is bigger than zero : " << all_of(deq.begin(), deq.end(), [](int i) {return i > 0; }) << endl;
 	deq.push_back(-2);
-	print_deque(deq);
+	Utility::print_deque(deq);
 	cout << "All values in the deque is bigger than zero : " << boolalpha << all_of(deq.begin(), deq.end(), greater_than_zero) << endl;
 	list<int> A{ 6,3,4, 55, 4, 3 ,-1 };
 	cout << "There is an element with value 4 in list : " << any_of(A.begin(), A.end(), [](int i) { return i == 4; }) << endl;
 	cout << "There is an element with value 74 in list : " << any_of(A.begin(), A.end(), [](int i) { return i == 74; }) << endl;
 	cout << "There is no element with value 74 in list : " << none_of(A.begin(), A.end(), [](int i) { return i == 74; }) << endl;
 
-
-	auto print_list = [](list<int> & A) {
-		for (list<int>::iterator it = A.begin(); it != A.end(); ++it) {
-			cout << *it << " ";
-		}
-		cout << endl;
-	};
-
 	cout << "Before incrementing list elements by 1: " << endl;
-	print_list(A);
+	Utility::print_list(A);
 	cout << "Incrementing values in the list" << endl;
 	for_each(A.begin(), A.end(), [](int &i) { i++; });
-	print_list(A);
+	Utility::print_list(A);
 
 	for_each(A.begin(), A.end(), Incrementer<int>());
-	print_list(A);
+	Utility::print_list(A);
 	for_each(A.begin(), A.end(), Incrementer<int>(4));
-	print_list(A);
+	Utility::print_list(A);
 
 	Incrementer<int>(8)(*(A.begin()));
 	*(A.begin()) += 8;
-	print_list(A);
+	Utility::print_list(A);
 
 
 
@@ -339,54 +268,198 @@ void STL_Study::algorithms_sequence_operations_run()
 	if (it_con != v3.end())
 	{
 		cout << "Found 3 consecutive 1's in v3 vector" << endl;
-		for (auto x : v3) cout << x;
-		cout << endl;
+		Utility::print_vector(v3);
 		int dist = distance(v3.begin(), it_con);
-		while (dist) { cout << " "; --dist; }
-		cout << "^" << endl;
+		while (dist) { cout << "  "; --dist; }
+		cout << " ^" << endl;
 	}
 }
 
 
-template <typename T, int size>
-int arr_size(T(&arr)[size])
+class A
 {
-	return size;
+	static int counter_;
+public:
+	int id;
+	A() : id(++counter_) { cout << "A() " << id << endl; }
+	A(const A &other) : id(++counter_) { cout << "A(const A &other) " << id << endl; }
+	A(A &&other) : id(other.id) { other.id = -1; cout << "A(A &&other) " << id << endl; }
+	A& operator=(const A &other) { id = ++counter_;  cout << "operator=(const A &other) " << id << endl; return *this; }
+	A& operator=(A &&other) { id = other.id; other.id = -1; cout << "operator=(A &&other) " << id << endl; return *this; }
+	~A() { cout << "~A()" << endl; }
+	friend ostream & operator<<(ostream& out, const A& obj)
+	{
+		return out << "A object with id : " << obj.id << endl;
+	}
+
+};
+
+int A::counter_ = 0;
+
+void STL_Study::algorithms_modifying_sequence_operations_run()
+{
+	cout << "\n\n\n" << "ALGORITHMS MODIFYING SEQUENCE OPERATIONS" << "__________________________\n" << endl;
+
+	// COPYING A VECTOR
+	vector<char> v{ 'a', 's', 'm', 'l' };
+	// Method 1
+	vector<char> v_dest = v;
+	// OR Method 2
+	//vector<char> v_dest;
+	// If you do not use back_inserter program will crash! Because destination vector has 0 elements and copy is trying
+	// to dereference the empty vector's iterator which is nullptr.
+	// Using back_inserter(Container &) or back_insert_iterator<..>(Container)
+	// back_inserter is a convenience function template that constructs a std::back_insert_iterator 
+	// for the container c with the type deduced from the type of the argument.
+	// std::back_insert_iterator is an OutputIterator that appends to a container for which it was constructed.
+	// The container's push_back() member function is called whenever the iterator (whether dereferenced or not)
+	// is assigned to. Incrementing the std::back_insert_iterator is a no-op.
+	//copy(v.begin(), v.end(), back_inserter(v_dest)); 
+	// OR Method 3
+	//vector<char> v_dest(v.size());  // You have to allocate enough space if back_inserter is not used.
+	//copy(v.begin(), v.end(), v_dest.begin());
+
+	Utility::print_vector<char>(v_dest);
+
+	// COPYING A VECTOR copy_if(..)
+	vector<char> v_dest_2;
+	copy_if(v.begin(), v.end(), back_inserter(v_dest_2), [](char c) { return c < 'm'; });
+	//copy_if(v.begin(), v.end(), back_insert_iterator<decltype(v_dest_2)>(v_dest_2), [](char c) { return c < 'm'; });
+	Utility::print_vector(v_dest_2);
+
+
+	// HOW COPY IS IMPLEMENTED INTERNALLY:
+	//vector<int> v_s{1,1,0};
+	//vector<int> v_d;
+	//auto input_it = v_s.begin();
+	//auto input_last = v_s.end();
+	//auto output_it = v_d.begin();
+
+	//// How copy works
+	//while(input_it != input_last)
+	//{
+	//	*output_it++ = *input_it++;  // output_it dereference will crash the program since it is nullptr
+	//}
+
+
+	// copy_n(..)
+	vector<int> scores{ 0, 20, 14, 13, 22, 14 };
+	vector<int> scores_copy;
+	copy_n(scores.begin(), 3, back_inserter(scores_copy));
+	Utility::print_vector(scores_copy);
+
+
+	// copy_backward(..) => doesn't reverse the order of the elements, simply reverses the order of transfer
+	vector<int> scores_backward(scores.size());
+	copy_backward(scores.begin(), scores.end(), scores_backward.end());
+	Utility::print_vector(scores_backward);
+
+
+	// move(..) => triggers the move constructor of elements. 
+	vector<A> v_A(4), v_A_dest(4); // Triggers 4 + 4 constructors of A class
+
+	cout << "Moving vector" << endl;
+	move(v_A.begin(), v_A.end(), v_A_dest.begin());  // Triggers move operator
+	cout << "Move doesn't empty the source vector, it copies with *d_first++ = std::move(*first++),\n";
+	cout << "turning the object to r-value reference using move and thereby triggering the move constructor\n";
+	cout << "In our example, objects residing in source vector after being moved with move operator their id is set to -1" << endl;
+	cout << "Source vector with size: " << v_A.size() << " => " << endl;
+	Utility::print_vector(v_A);
+	cout << "Destination vector with size: " << v_A_dest.size() << " => " << endl;
+	Utility::print_vector(v_A_dest);
+
+	// move_backward(..) => moves from last to first order
+	cout << "Moving backwards\n";
+	move_backward(v_A_dest.begin(), v_A_dest.end(), v_A.end());
+	Utility::print_vector(v_A);
+	Utility::print_vector(v_A_dest);
+
+	// fill(..) => copy assigns the value to the vector range
+	cout << "Filling vector\n";
+	fill(v_A_dest.begin(), v_A_dest.end(), A());
+	Utility::print_vector(v_A_dest);
+	
+	// fill_n(..) => copy assigns to n elements starting from the given iterator
+	cout << "Filling n elements of vector\n";
+	fill_n(v_A_dest.begin(), 2, A());
+	Utility::print_vector(v_A_dest);
+
+
+	// transform(..) => applies given function to a range and stores the result in another range
+	cout << "Transforming first 2 elements of vector\n";
+	transform(v_A_dest.begin(), v_A_dest.begin() + 2, v_A_dest.begin() + 2, [](A& obj) -> A { A temp(obj); temp.id = temp.id * 100 + obj.id; return temp; });
+	Utility::print_vector(v_A_dest);
+
+	string s("Hello algorithms");
+	cout << R"(Transforming: ")" << s << R"(")";
+	size_t pos = s.find("algo");
+	auto it_begin = s.begin() + pos;
+	//transform(it, s.end(), it, [](unsigned char c) -> unsigned char { return toupper(c); }); // Lambda version
+	transform(it_begin, s.end(), it_begin, toupper);
+	cout << R"( => ")" << s << R"(")" << endl;
+
+	// generate(..) => assigns the result of successive function calls to every element in a range
+	vector<int> points{ 10, 5, 20, 13, 34, 55, 0 };
+	cout << "generate(..)\n";
+	Utility::print_vector(points);
+	generate(points.begin() + 2, points.end(), Utility::get_id);
+	Utility::print_vector(points);
+
+	// generate_n(..)
+	cout << "generate_n(..)\n";
+	generate_n(points.begin(), 2, Utility::get_id);
+	Utility::print_vector(points);
+
+	// remove  (erase-remove-idiom) => remove returns the Past-the-end iterator for the new range of values 
+	cout << "remove(..)\n"; 
+	points.erase(remove(points.begin(), points.end(), 22), points.end());
+	Utility::print_vector(points);
+
+	// remove_if
+	cout << "remove_if(..)\n";
+	points.erase(remove_if(points.begin(), points.end(), [](int i) {return i % 3 == 0; }), points.end());
+	Utility::print_vector(points);
+
+	// remove_copy(..) => copies a range of elements omitting those that satisfy specific criteria
+	cout << "remove_copy(..)\n";
+	vector<int> copy_points;
+	remove_copy(points.begin(), points.end(), back_inserter(copy_points), 7);
+	Utility::print_vector(copy_points);
+
+	string text{ "Text with     some                spaces" };
+	cout << "Before: " << text << endl;
+	cout << "After: " << endl;
+	remove_copy(text.begin(), text.end(), ostream_iterator<char>(cout), ' ');
+	cout << '\n';
+	
+
 }
+
 
 class Empty {};
 void STL_Study::algoirthms_sorting_operations_run()
 {
 	cout << "\n\n\n" << "ALGORITHMS SORTING OPERATIONS" << "__________________________\n" << endl;
 
-	auto print_vector = [](vector<int> &v)
-	{
-		for (auto & x : v) { cout << x << " "; }
-		cout << endl;
-	};
-
-
-	int a[] = { 4,1,2,6,22,10 };
-	cout << "Array size: " << arr_size(a);
+	int a[] = { 4, 1, 2, 6, 22, 10 };
+	cout << "Array size: " << Utility::array_size(a);
 	cout << "\n" << "Array before sort: \n\t";
-	for (auto i : a) { cout << i << " "; }
+	Utility::print_array(a);
 
+	// Remember sort expects beginning and ending iterators. In arrays the pointers are treated as iterators.
 	sort(a, a + (sizeof(a)/sizeof(int)));
 	cout << "\n" << "Array after sort: \n\t";
-	for (auto i : a) { cout << i << " "; } cout << endl;
-	for (int * it = a; it != a + (sizeof(a) / sizeof(int)); ++it)
-	{
-		cout << *it << " ";
-	}
+	Utility::print_array(a);
 
-	int b[] = { 1,5,2 };
+
+	int b[] = { 1, 5, 2 };
 	// sizes are different therefore different types
 	cout << "Types of a and b arrays are equal : " << boolalpha << (typeid(a) == typeid(b)) << endl;
 	cout << "a[int] type is : " << typeid(a).name() << endl;  // int [6]
 	cout << "b[int] type is : " << typeid(b).name() << endl;  // int [3]
 
 
-	int c[] = {0,0,1};
+	int c[] = { 0, 0, 1 };
 	// sizes are the same therefore same types
 	cout << "Types of b and c arrays are equal : " << boolalpha << (typeid(b) == typeid(c)) << endl;
 	cout << "b[int] type is : " << typeid(b).name() << endl;  // int [6]
@@ -394,12 +467,12 @@ void STL_Study::algoirthms_sorting_operations_run()
 
 
 	// check if range is sorted in ascending order
-	vector<int> v{8,4,17,0,1,5};
+	vector<int> v{ 8, 4, 17, 0, 1, 5 };
 	cout << "Before sort___________:" << endl;
-	print_vector(v);
+	Utility::print_vector(v);
 	sort(v.begin(), v.end() - 2);
 	cout << "After sort___________:" << endl; 
-	print_vector(v);
+	Utility::print_vector(v);
 
 	cout << "Vector is sorted in range v.begin() - (v.end() - 2) : " << boolalpha << is_sorted(v.begin(), v.end() - 2) << endl;
 	cout << "Vector is sorted in range v.begin() - v.end() : " << boolalpha << is_sorted(v.begin(), v.end()) << endl;
@@ -407,7 +480,7 @@ void STL_Study::algoirthms_sorting_operations_run()
 	// find the iterator where the vector is sorted until
 	vector<int>::iterator it = is_sorted_until(v.begin(), v.end());
 	int dist = distance(v.begin(), it);
-	print_vector(v);
+	Utility::print_vector(v);
 	while (dist--) cout << "  "; cout << "^" << endl;
 	cout << "Vector is sorted until: " << *it << endl;
 
@@ -428,7 +501,7 @@ void STL_Study::algoirthms_sorting_operations_run()
 
 	std::nth_element(v3.begin(), v3.begin() + 1, v3.end(), std::greater<int>());
 	std::cout << "The second largest element is " << v3[1] << '\n';
-	print_vector(v3);
+	Utility::print_vector(v3);
 	cout << "Note that the vector is sorted for this example BUT IT DIDN'T HAVE TO BE!" << endl;
 
 	// Compiler dependent but usually 1 byte. This is required to be able to differentiate two different "Empty" objects.

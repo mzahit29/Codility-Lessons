@@ -18,5 +18,6 @@ class STL_Study
 public:
 	static void containers_run();
 	static void algorithms_sequence_operations_run();
+	static void algorithms_modifying_sequence_operations_run();
 	static void algoirthms_sorting_operations_run();
 };
