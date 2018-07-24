@@ -13,6 +13,7 @@
 #include <stack>
 #include <set>
 #include <iterator>
+#include <functional>
 
 
 using namespace std;
@@ -281,11 +282,13 @@ class A
 	static int counter_;
 public:
 	int id;
+	int stored_val;
 	A() : id(++counter_) { cout << "A() " << id << endl; }
+	A(int x) : stored_val(x), id(++counter_) { cout << "A(int x) " << id << endl; }
 	A(const A &other) : id(++counter_) { cout << "A(const A &other) " << id << endl; }
-	A(A &&other) : id(other.id) { other.id = -1; cout << "A(A &&other) " << id << endl; }
+	//A(A &&other) : id(other.id) { other.id = -1; cout << "A(A &&other) " << id << endl; }
 	A& operator=(const A &other) { id = ++counter_;  cout << "operator=(const A &other) " << id << endl; return *this; }
-	A& operator=(A &&other) { id = other.id; other.id = -1; cout << "operator=(A &&other) " << id << endl; return *this; }
+	//A& operator=(A &&other) { id = other.id; other.id = -1; cout << "operator=(A &&other) " << id << endl; return *this; }
 	~A() { cout << "~A()" << endl; }
 	friend ostream & operator<<(ostream& out, const A& obj)
 	{
@@ -295,6 +298,17 @@ public:
 };
 
 int A::counter_ = 0;
+
+// Example functional implementation
+template <typename T>
+class my_less
+{
+public:
+	bool operator()(const T &lhs, const T &rhs)
+	{
+		return lhs < rhs;
+	}
+};
 
 void STL_Study::algorithms_modifying_sequence_operations_run()
 {
@@ -420,7 +434,7 @@ void STL_Study::algorithms_modifying_sequence_operations_run()
 	points.erase(remove_if(points.begin(), points.end(), [](int i) {return i % 3 == 0; }), points.end());
 	Utility::print_vector(points);
 
-	// remove_copy(..) => copies a range of elements omitting those that satisfy specific criteria
+	// remove_copy(..) => copies a range of elements omitting those that are equal to the value given as last parameter
 	cout << "remove_copy(..)\n";
 	vector<int> copy_points;
 	remove_copy(points.begin(), points.end(), back_inserter(copy_points), 7);
@@ -431,7 +445,69 @@ void STL_Study::algorithms_modifying_sequence_operations_run()
 	cout << "After: " << endl;
 	remove_copy(text.begin(), text.end(), ostream_iterator<char>(cout), ' ');
 	cout << '\n';
-	
+
+	// remove_copy_if(..) => copies a range of elements omitting those that satisfy predicate
+	cout << "remove_copy_if(..)\n";
+	vector<int> copy_if_ints{ 1,2,3,4,5,6 };
+	vector<int> copy_if_ints_dest;
+	remove_copy_if(copy_if_ints.begin(), copy_if_ints.end(), back_inserter(copy_if_ints_dest), [](int x) { return x < 4; });
+	Utility::print_vector(copy_if_ints);
+	Utility::print_vector(copy_if_ints_dest);
+
+
+	// replace(..) => replaces the value given to another value on the same vector
+	cout << "replace(..)\n";
+	vector<int> replace_ints{ 1,2,3,4,5,6 };
+	cout << "Before replace: ";
+	Utility::print_vector(replace_ints);
+	replace(replace_ints.begin(), replace_ints.end(), 2, 22);
+	cout << "After replace: ";
+	Utility::print_vector(replace_ints);
+
+	// replace_if(..) => replaces the values satisfying the criteria to another value on the same vector
+	cout << "replace(..)\n";
+	vector<int> replace_if_ints{ 1,2,3,4,5,6 };
+	cout << "Before replace: ";
+	Utility::print_vector(replace_ints);
+	replace_if(replace_if_ints.begin(), replace_if_ints.end(), [](int x) { return x % 3 == 0; }, 88);
+	// using a functional class to use as a predicate. my_less requires to parameters to compare, but we want to turn it into
+	// a function which only takes one argument and returns true if it is less than 5
+	//cout << "3 is less than 5 : " << boolalpha << my_less<int>()(3, 5) << endl;
+	cout << "After replace: ";
+	Utility::print_vector(replace_if_ints);
+	// Using std::less<T>
+	//replace_if(replace_if_ints.begin(), replace_if_ints.end(), std::bind(std::less<int>(), std::placeholders::_1, 5), -1);
+	// Using our own my_less<T> functional
+	replace_if(replace_if_ints.begin(), replace_if_ints.end(), std::bind(my_less<int>(), std::placeholders::_1, 5), -1);
+	cout << "After replace: ";
+	Utility::print_vector(replace_if_ints);
+
+
+	// replace_copy(..) => copies a range but replaces the ones with certain value in destination
+	cout << "replace_copy(..)\n";
+	vector<int> replace_copy_ints{ 1,2,3,4,5,6,7,8 };
+	vector<int> replace_copy_ints_dest;
+	replace_copy(replace_copy_ints.begin(), replace_copy_ints.end(), back_inserter(replace_copy_ints_dest), 2, 99);
+	Utility::print_vector(replace_copy_ints);
+	Utility::print_vector(replace_copy_ints_dest);
+
+	// replace_copy_if(..) => copies a range but replaces the ones that satisfy the predicate
+	cout << "replace_copy_if(..)\n";
+	vector<int> replace_copy_if_ints{ 1,2,3,4,5,6,7,8 };
+	vector<int> replace_copy_if_ints_dest;
+	replace_copy_if(replace_copy_if_ints.begin(), replace_copy_if_ints.end(), back_inserter(replace_copy_if_ints_dest),
+		std::bind(std::greater_equal<int>(), std::placeholders::_1, 5), 114);
+	Utility::print_vector(replace_copy_if_ints);
+	Utility::print_vector(replace_copy_if_ints_dest);
+
+
+	// swap(..) => object has to be move constructibe and move assignable.
+	cout << "swap(..)\n";
+	A a{ 7 }, b{ 44 };
+	cout << "Before swap\t" << "a: " << a << " b: " << b << endl;
+	swap(a, b);
+	cout << "After swap\t" << "a: " << a << " b: " << b << endl;
+
 
 }
 
